@@ -42,4 +42,4 @@ Claude「Sure. Here's the updated version...」
 
 # 今日の学び
 
-最初に言語指定すると安定するかも
+CLAUDE.mdに「出力結果は日本語にするように」と一行書けば毎回言わずに済む
