@@ -1,0 +1,57 @@
+name: Auto Number Themes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'themes/**'
+
+jobs:
+  number-themes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Auto-number new theme folders
+        run: |
+          cd themes
+
+          # 現在の最大番号を取得
+          max_num=0
+          for dir in */; do
+            dir="${dir%/}"
+            if [[ "$dir" =~ ^♯([0-9]+)_ ]]; then
+              num=$((10#${BASH_REMATCH[1]}))
+              if [ $num -gt $max_num ]; then
+                max_num=$num
+              fi
+            fi
+          done
+
+          # 番号なしフォルダを検出してリネーム
+          renamed=0
+          for dir in */; do
+            dir="${dir%/}"
+            if [[ ! "$dir" =~ ^♯ ]]; then
+              max_num=$((max_num + 1))
+              new_name="$(printf '♯%03d' $max_num)_${dir}"
+              echo "Renaming: $dir → $new_name"
+              git mv "$dir" "$new_name"
+              renamed=$((renamed + 1))
+            fi
+          done
+
+          if [ $renamed -eq 0 ]; then
+            echo "No unnumbered folders found. Skipping commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "🔢 Auto-number new theme folders"
+          git push
