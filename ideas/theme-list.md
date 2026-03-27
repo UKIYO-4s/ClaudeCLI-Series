@@ -44,6 +44,7 @@
 - [x] ♯031 success-message-lie　成功メッセージは嘘だった
 - [x] ♯032 mcp-tool-wrong　MCPツールを間違えて別のツールを呼ぶ
 - [x] ♯033 original-is-copy　「独自アルゴ」が既存の焼き直しだった
+- [x] ♯034 english-confirm　確認の選択肢が英語で意味がわからない
 
 ### ネタ候補
 
